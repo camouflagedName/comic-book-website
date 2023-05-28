@@ -1,0 +1,8 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+#page-title {
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    letter-spacing: .1rem;
+}

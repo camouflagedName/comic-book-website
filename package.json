@@ -5,8 +5,11 @@
   "version": "0.1.0",
   "author": "Kyle Mathews <mathews.kyle@gmail.com>",
   "dependencies": {
+    "flowbite": "^1.6.5",
+    "flowbite-react": "^0.4.4",
     "gatsby": "^5.10.0",
     "gatsby-plugin-image": "^3.10.0",
+    "gatsby-plugin-layout": "^4.10.0",
     "gatsby-plugin-manifest": "^5.10.0",
     "gatsby-plugin-sharp": "^5.10.0",
     "gatsby-source-filesystem": "^5.10.0",
@@ -15,7 +18,11 @@
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
-    "prettier": "^2.8.8"
+    "autoprefixer": "^10.4.14",
+    "gatsby-plugin-postcss": "^6.10.0",
+    "postcss": "^8.4.23",
+    "prettier": "^2.8.8",
+    "tailwindcss": "^3.3.2"
   },
   "keywords": [
     "gatsby"

@@ -1,10 +1,9 @@
 import * as React from "react"
 import { Link } from "gatsby"
 import { StaticImage } from "gatsby-plugin-image"
-
-import Layout from "../components/layout"
 import Seo from "../components/seo"
-import * as styles from "../components/index.module.css"
+import { Button, Card } from "flowbite-react"
+
 
 const links = [
   {
@@ -70,59 +69,42 @@ const moreLinks = [
 const utmParameters = `?utm_source=starter&utm_medium=start-page&utm_campaign=default-starter`
 
 const IndexPage = () => (
-  <Layout>
-    <div className={styles.textCenter}>
-      <StaticImage
-        src="../images/example.png"
-        loading="eager"
-        width={64}
-        quality={95}
-        formats={["auto", "webp", "avif"]}
-        alt=""
-        style={{ marginBottom: `var(--space-3)` }}
-      />
-      <h1>
-        Welcome to <b>Gatsby!</b>
-      </h1>
-      <p className={styles.intro}>
-        <b>Example pages:</b>{" "}
-        {samplePageLinks.map((link, i) => (
-          <React.Fragment key={link.url}>
-            <Link to={link.url}>{link.text}</Link>
-            {i !== samplePageLinks.length - 1 && <> · </>}
-          </React.Fragment>
-        ))}
-        <br />
-        Edit <code>src/pages/index.js</code> to update this page.
-      </p>
-    </div>
-    <ul className={styles.list}>
-      {links.map(link => (
-        <li key={link.url} className={styles.listItem}>
-          <a
-            className={styles.listItemLink}
-            href={`${link.url}${utmParameters}`}
+  <div className="my-auto">
+    <main>
+      <Card>
+        <h5 id="page-title" className="text-6xl font-medium tracking-tight text-gray-900 dark:text-purple-200 text-center">
+          The Odyssey of Izarynne
+        </h5>
+        <div className="flex flex-row">
+          <StaticImage
+            src="../images/preview.png"
+            loading="lazy"
+            quality={85}
+            formats={["auto", "webp", "avif"]}
+            alt=""
+            style={{ marginBottom: `var(--space-3)` }}
+            className="h-auto rounded-lg w-4/5 mx-auto"
+          />
+        </div>
+        <h6 className="text-4xl tracking-tight text-gray-900 dark:text-purple-200 text-center mb-3">A new comic book by Simon Conway</h6>
+        <div className="mx-auto">
+          <Link
+            to="/comics"
+            className="text-white bg-gradient-to-r from-cyan-500 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800 font-medium rounded-lg text-sm px-5 py-3.5 text-center mr-2 mb-2"
           >
-            {link.text} ↗
-          </a>
-          <p className={styles.listItemDescription}>{link.description}</p>
-        </li>
-      ))}
-    </ul>
-    {moreLinks.map((link, i) => (
-      <React.Fragment key={link.url}>
-        <a href={`${link.url}${utmParameters}`}>{link.text}</a>
-        {i !== moreLinks.length - 1 && <> · </>}
-      </React.Fragment>
-    ))}
-  </Layout>
+            <span className="text-xl">Click to Enter</span>
+          </Link>
+        </div>
+      </Card>
+    </main>
+  </div>
 )
-
 /**
  * Head export to define metadata for the page
  *
  * See: https://www.gatsbyjs.com/docs/reference/built-in-components/gatsby-head/
  */
-export const Head = () => <Seo title="Home" />
+export const Head = () => <Seo title="Main" description="Your description"></Seo>
+
 
 export default IndexPage
