@@ -51,9 +51,9 @@ pnpm dev
 ## Dependencies
 
 >Flowbite
-<br/>
+><br/>
 >React
-<br/>
+><br/>
 >Tailwind
-<br/>
+><br/>
 >Typescript
