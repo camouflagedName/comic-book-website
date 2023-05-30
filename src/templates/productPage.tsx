@@ -3,10 +3,9 @@ import Layout from "../components/Layout"
 import { Breadcrumb, Card, TextInput } from "flowbite-react"
 import { Button } from "flowbite-react"
 import useImage from "../hooks/useImage"
-import { ICartItem, IComicBook } from '../interfaces/interfaces';
+import { IComicBook } from '../interfaces/interfaces';
 import Seo from "../components/seo"
 import { CartContext } from '../context/CartContext';
-import comicBooks from '../comicBooks';
 
 interface IPageContext {
   comic: IComicBook
