@@ -24,6 +24,9 @@
     "prettier": "^2.8.8",
     "tailwindcss": "^3.3.2"
   },
+  "engines": {
+    "node": "18.x"
+  },
   "keywords": [
     "gatsby"
   ],
