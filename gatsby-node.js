@@ -29,7 +29,7 @@ const comicBooksAlt = [
 ];
 
 const path = require('path');
-const comicBooks = require(".\src\comicBooks.ts")
+//const comicBooks = require(".\src\comicBooks.ts")
 
 
 /**
@@ -45,13 +45,11 @@ exports.createPages = async ({ actions }) => {
     defer: true,
   })
 
-  comicBooks.forEach(comic => {
+  comicBooksAlt.forEach(comic => {
     createPage({
       path: `/comics/${comic.short}`,
       component: path.resolve('./src/templates/productPage.tsx'),
       context: {comic}
     })
-
   })
-
 }

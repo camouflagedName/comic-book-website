@@ -2,13 +2,10 @@ import React, { useEffect, useState } from "react";
 import { CartContext } from "../context/CartContext";
 import { ICartItem } from "../interfaces/interfaces";
 
-let storedCartData;
-const storedCart = localStorage.getItem('cart');
-if (storedCart) {
-    storedCartData = JSON.parse(storedCart);
-}
+
 const CartWrapper = ({ children }) => {
-    const [cart, setCart] = useState<ICartItem[]>(storedCartData ?? []);
+    const [cart, setCart] = useState<ICartItem[]>([]);
+    const [isUpdated, setIsUpdated] = useState(false);
 
     const add = (newItem: ICartItem) => {
         setCart(prev => [...prev, newItem])
@@ -20,19 +17,34 @@ const CartWrapper = ({ children }) => {
             cartCopy.pop()
             return cartCopy;
         })
-
     }
 
     const update = (updatedCart: ICartItem[]) => {
         setCart(updatedCart);
+        setIsUpdated(true);
     }
 
     useEffect(() => {
-        console.log(cart)
-        localStorage.removeItem('cart')
-        localStorage.setItem('cart', JSON.stringify(cart))
+        if (cart.length > 0) {
+            localStorage.removeItem('cart')
+            localStorage.setItem('cart', JSON.stringify(cart))
+        }
     }, [cart])
 
+    useEffect(() => {
+        const storedCart = localStorage.getItem('cart');
+        if (storedCart) {
+            const storedCartData = JSON.parse(storedCart);
+            setCart(storedCartData)
+        }
+    }, [])
+
+    useEffect(() => {
+        if (isUpdated) {
+            localStorage.removeItem('cart')
+            localStorage.setItem('cart', JSON.stringify(cart))
+        }
+    }, [isUpdated])
 
 
     return (

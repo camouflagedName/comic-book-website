@@ -10,20 +10,14 @@ import CartWrapper from './src/components/CartWrapper';
 /**
  * @type {import('gatsby').GatsbySSR['onRenderBody']}
  */
-exports.onRenderBody = ({ setHtmlAttributes }) => {
+export const onRenderBody = ({ setHtmlAttributes }) => {
   setHtmlAttributes({ lang: `en` })
 }
 
-exports.wrapPageElement = ({element}) => {
-
-  return (
+export const wrapPageElement = ({element}) => (
       <CartWrapper>{element}</CartWrapper>
   )
-}
 
-exports.wrapRootElement = ({element}) => {
-
-  return (
+export const wrapRootElement = ({element}) => (
       <CartWrapper>{element}</CartWrapper>
   )
-}

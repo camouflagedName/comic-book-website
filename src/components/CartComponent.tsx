@@ -7,7 +7,8 @@ import { ICartItem, ICartContext } from "../interfaces/interfaces"
 const CartComponent = () => {
     const context = useContext<ICartContext>(CartContext);
     const { cart, update } = context;
-    const [cartState, setCartState] = useState(cart)
+
+    const [cartState, setCartState] = useState<ICartItem[]>([])
     const [total, setTotal] = useState(0);
 
     const updateQuantity = (itemNumber: number, newQuantity: number) => {
@@ -25,7 +26,7 @@ const CartComponent = () => {
         setCartState(prev => {
             const cartCopy = [...prev];
             cartCopy.splice(itemNumber, 1);
-
+            update(cartCopy)
             return cartCopy;
         })
 
@@ -36,14 +37,18 @@ const CartComponent = () => {
     }
 
     useEffect(() => {
-        update(cartState)
+       //update(cartState)
     }, [cartState])
 
-useEffect(() => {
-    cart.forEach(item => {
-        setTotal(prev => prev + (item.quantity * item.price))
-    })
-}, [])
+
+    useEffect(() => {
+        console.log(cart)
+        setCartState(cart)
+        cart.forEach(item => {
+            setTotal(prev => prev + (item.quantity * item.price))
+        })
+    }, [cart])
+
     return (
         <>
             <div className="flex flex-row justify-center">
@@ -55,7 +60,7 @@ useEffect(() => {
                         <div className="flow-root">
                             <ul className="divide-y divide-gray-200 dark:divide-gray-700">
                                 {cartState.map(({ title, imgSrc, price, quantity }, index) => (
-                                    <CartItem key={`${index}-${title}`} img={imgSrc} title={title} price={price} quantity={quantity} index={index} updateQuantity={updateQuantity} remove={removeItem} updateTotal={updateSubtotal}/>
+                                    <CartItem key={`${index}-${title}`} img={imgSrc} title={title} price={price} quantity={quantity} index={index} updateQuantity={updateQuantity} remove={removeItem} updateTotal={updateSubtotal} />
                                 ))}
                                 <li className="py-3 sm:py-4">
                                     <div className="flex justify-end">
@@ -87,15 +92,13 @@ useEffect(() => {
 export default CartComponent;
 
 
-const CartItem = ({ img, title, quantity, price, index, updateQuantity, remove, updateTotal }: 
+const CartItem = ({ img, title, quantity, price, index, updateQuantity, remove, updateTotal }:
     { img: string, title: string, quantity: number, price: number, index: number, updateQuantity: (itemNumber: number, newQuantity: number) => void, remove: (itemNumber: number) => void, updateTotal: (param: number) => void }) => {
     const [quantityState, setQuantityState] = useState(quantity);
     const imgSrc = useImage(img)
 
     const handleChange: React.ChangeEventHandler<HTMLInputElement> = (ev) => {
         const newQuantity = Number(ev.target.value);
-        console.log(title)
-        console.log(newQuantity)
         setQuantityState(newQuantity)
         updateQuantity(index, newQuantity);
         updateTotal(newQuantity * price);
@@ -105,7 +108,7 @@ const CartItem = ({ img, title, quantity, price, index, updateQuantity, remove, 
         remove(index);
         updateTotal((quantity * price * -1))
     }
-    
+
     return (
         <li className="py-3 sm:py-4">
             <div className="flex items-center space-x-4">

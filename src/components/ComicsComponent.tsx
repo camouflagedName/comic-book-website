@@ -12,7 +12,7 @@ const ComicsComponentALT = () => {
             const loadedProducts = await Promise.all(
                 comicBooks.map(async ({ title, imgSrc, price, description, short }) => {
                     const img = await import(imgSrc);
-                    console.log(imgSrc)
+
                     return <ComicItem title={title} img={img} price={price} description={description} shortURL={short} />
                 })
             );
@@ -37,7 +37,7 @@ const ComicsComponent = () => {
             {comicBooks.map(({ title, imgSrc, price, description, short }, index) => {
 
                 return <ComicItem title={title} img={imgSrc} price={price} description={description} shortURL={short} key={short} />
-    })}
+            })}
         </div>
     )
 }
@@ -46,8 +46,10 @@ const ComicsComponent = () => {
 export default ComicsComponent;
 
 const ComicItem = ({ title, img, price, description, shortURL }: { title: string, img: string, price: number, description: string | undefined, shortURL: string | undefined }) => {
+    /*
     const [productImg, setProductImg] = useState("")
 
+    
     useEffect(() => {
         const getImages = async () => {
             const imageModule = await import(`../images/${img}`)
@@ -56,6 +58,7 @@ const ComicItem = ({ title, img, price, description, shortURL }: { title: string
 
         getImages();
     }, [])
+*/
 
     const imgSrc = useImage(img);
 

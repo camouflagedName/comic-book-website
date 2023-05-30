@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import Layout from '../components/layout'
+import Layout from "../components/Layout"
 import { Breadcrumb, Card, TextInput } from "flowbite-react"
 import { Button } from "flowbite-react"
 import useImage from "../hooks/useImage"
@@ -25,7 +25,6 @@ const ComicTemplate = ({ pageContext }: { pageContext: IPageContext }) => {
   const [quantity, setQuantity] = useState(1);
   //const [currentItem, setCurrentItem] = useState<ICartItem>({...comic, quantity: quantity})
 
-  console.log(cart)
   const handleClick = () => {
     if (!productAdded) {
       add({ ...comic, quantity: quantity })
