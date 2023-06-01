@@ -71,7 +71,8 @@ const utmParameters = `?utm_source=starter&utm_medium=start-page&utm_campaign=de
 const IndexPage = () => (
   <div className="my-auto">
     <main>
-      <Card>
+      <div className="flex border border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800 flex-col h-screen">
+        <div class="flex h-full flex-col justify-center gap-4 p-6">
         <h5 id="page-title" className="text-6xl font-medium tracking-tight text-gray-900 dark:text-purple-200 text-center">
           The Odyssey of Izarynne
         </h5>
@@ -95,7 +96,8 @@ const IndexPage = () => (
             <span className="text-xl">Click to Enter</span>
           </Link>
         </div>
-      </Card>
+        </div>
+      </div>
     </main>
   </div>
 )
