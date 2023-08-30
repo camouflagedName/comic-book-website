@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react"
 import comicBooks from "../comicBooks"
 import useImage from "../hooks/useImage"
 
+/* 
 const ComicsComponentALT = () => {
     const [itemsArr, setItemsArr] = useState<JSX.Element[]>([]);
 
@@ -29,39 +30,36 @@ const ComicsComponentALT = () => {
     )
 }
 
+*/
+
 const ComicsComponent = () => {
 
+    const comicBookArr: React.ReactNode[] = [];
+    for (const id in comicBooks) {
+        const item = comicBooks[id];
+        comicBookArr.push (
+        <ComicItem
+            title={item.title}
+            img={item.imgSrc}
+            price={item.price}
+            description={item.description}
+            shortURL={item.short}
+            key={item.short} />
+        )
+    }
 
     return (
         <div className="flex flex-row gap-12 justify-center">
-            {comicBooks.map(({ title, imgSrc, price, description, short }, index) => {
-
-                return <ComicItem title={title} img={imgSrc} price={price} description={description} shortURL={short} key={short} />
-            })}
+            { comicBookArr }
         </div>
     )
 }
 
-
 export default ComicsComponent;
 
-const ComicItem = ({ title, img, price, description, shortURL }: { title: string, img: string, price: number, description: string | undefined, shortURL: string | undefined }) => {
-    /*
-    const [productImg, setProductImg] = useState("")
-
-    
-    useEffect(() => {
-        const getImages = async () => {
-            const imageModule = await import(`../images/${img}`)
-            setProductImg(imageModule.default);
-        }
-
-        getImages();
-    }, [])
-*/
-
+const ComicItem = ({ title, img, price, description, shortURL }:
+    { title: string, img: string, price: number, description: string | undefined, shortURL: string | undefined }) => {
     const imgSrc = useImage(img);
-
 
     return (
         <div className="max-w-sm">

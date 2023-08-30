@@ -6,6 +6,7 @@
 
 const comicBooksAlt = [
   {
+      id: 0,
       title: "Odyssey of Izarynne Vol 0",
       short: "vol0",
       imgSrc: "vol0.png",
@@ -13,6 +14,7 @@ const comicBooksAlt = [
       description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
   },
   {
+      id: 1,
       title: "Odyssey of Izarynne Vol 1",
       short: "vol1",
       imgSrc: "vol1.png",
@@ -20,6 +22,7 @@ const comicBooksAlt = [
       description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
   },
   {
+      id: 2,
       title: "Odyssey of Izarynne Vol 2",
       short: "vol2",
       imgSrc: "vol1.png",

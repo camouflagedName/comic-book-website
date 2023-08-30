@@ -1,8 +1,23 @@
-export interface ICartItem extends IComicBook{
+/* export interface ICartItem extends IComicBook{
     quantity: number;
+}
+ */
+
+export interface IItem {
+    [key: string]: number;
+}
+
+export interface ICart {
+    products: IItem
+    total: number;
+}
+
+export interface IComicBookCollection {
+    [id: number]: IComicBook;
 }
 
 export interface IComicBook {
+    id: number;
     title: string;
     short?: string;
     imgSrc: string;
@@ -11,8 +26,15 @@ export interface IComicBook {
 }
 
 export interface ICartContext {
-    cart: ICartItem[];
-    add: (newItem: ICartItem) => void;
-    remove: () => void;
-    update: (updatedCart: ICartItem[]) => void;
+    cart: ICart;
+    add: Add;
+    remove: Remove;
+    update: Update;
 }
+
+
+/* CART WRAPPER FUNCTIONS */
+
+export type Add = (newItem: IItem) => void;
+export type Remove =  (newItem: IItem) => void;
+export type Update = (updatedCart: ICart) => void;

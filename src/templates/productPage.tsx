@@ -3,7 +3,7 @@ import Layout from "../components/Layout"
 import { Breadcrumb, Card, TextInput } from "flowbite-react"
 import { Button } from "flowbite-react"
 import useImage from "../hooks/useImage"
-import { IComicBook } from '../interfaces/interfaces';
+import { ICartContext, IComicBook } from '../interfaces/interfaces';
 import Seo from "../components/seo"
 import { CartContext } from '../context/CartContext';
 
@@ -13,23 +13,19 @@ interface IPageContext {
 
 const ComicTemplate = ({ pageContext }: { pageContext: IPageContext }) => {
   /* static data */
-  const { cart, add, remove } = useContext(CartContext);
+  const { add, remove } = useContext<ICartContext>(CartContext);
   const { comic } = pageContext;
   const imgSrc = useImage(comic.imgSrc);
-  //const cart: ICartItem[] = useContext(CartContext)
-  //const currentItem: ICartItem = {...comic, quantity: quantity}
 
   /* dynamic data */
   const [productAdded, setProductAdded] = useState(false);
   const [quantity, setQuantity] = useState(1);
-  //const [currentItem, setCurrentItem] = useState<ICartItem>({...comic, quantity: quantity})
 
   const handleClick = () => {
+    const newItem = { [comic.id]: quantity };
     if (!productAdded) {
-      add({ ...comic, quantity: quantity })
-    } else {
-      remove();
-    }
+      add(newItem);
+    } else remove(newItem);
     setProductAdded(!productAdded);
   }
 
@@ -71,7 +67,6 @@ const ComicTemplate = ({ pageContext }: { pageContext: IPageContext }) => {
                 </p>
                 <div className='flex flex-row'>
                   <TextInput type="text" value={quantity} className="w-1/5 mx-auto" onChange={handleChange} />
-
                   <Button onClick={handleClick} className='mx-auto'>
                     {!productAdded ? "Add to Cart" : "Remove from Cart"}
                   </Button>

@@ -1,13 +1,10 @@
 import { Card } from "flowbite-react"
-import React, { useContext, useEffect, useState } from "react"
+import React, { useEffect, useState } from "react"
 //import imgMain from "../images/preview.png";
 import { StaticImage } from "gatsby-plugin-image";
-import MainBody from "./AboutComponent";
-import { CartContext } from "../context/CartContext";
 
 const MainComponent = ({ children, size }: { children: JSX.Element, size?: string}) => {
     const [imgSize, setImgSize] = useState('w-1/4');
-    const cart = useContext(CartContext);
     //<img src={imgMain} alt="Example" className="h-auto mx-auto rounded-lg"/>
 
     useEffect(() => {

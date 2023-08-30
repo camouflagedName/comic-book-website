@@ -2,52 +2,108 @@ import { Button, Card, TextInput } from "flowbite-react"
 import React, { useContext, useEffect, useState } from "react"
 import { CartContext } from "../context/CartContext"
 import useImage from "../hooks/useImage"
-import { ICartItem, ICartContext } from "../interfaces/interfaces"
+import { IItem, ICart, ICartContext, IComicBook } from "../interfaces/interfaces"
+import comicBooks from "../comicBooks"
 
 const CartComponent = () => {
     const context = useContext<ICartContext>(CartContext);
-    const { cart, update } = context;
-
-    const [cartState, setCartState] = useState<ICartItem[]>([])
-    const [total, setTotal] = useState(0);
+    const { cart, update, remove } = context;
+    const [cartState, setCartState] = useState<ICart>(cart)
+    const [totalPrice, setTotalPrice] = useState(0);
+    const [totalQuantity, setTotalQuantity] = useState(0);
+    const [productList, setProductList] = useState<React.ReactNode[]>();
 
     const updateQuantity = (itemNumber: number, newQuantity: number) => {
-        if (newQuantity === 0) removeItem(itemNumber);
         setCartState(prev => {
-            const cartCopy = [...prev];
-            const currentItem = cartCopy[itemNumber];
-            currentItem.quantity = newQuantity;
-
+            const cartCopy = { ...prev };
+            if (cartCopy.products && cartCopy.products[itemNumber]) {
+                cartCopy.products[itemNumber] = newQuantity;
+                //update(cartCopy)
+            }
             return cartCopy;
         })
     }
 
-    const removeItem = (itemNumber: number) => {
+    const removeItem = (itemNumber: number, quantity: number) => {
         setCartState(prev => {
-            const cartCopy = [...prev];
-            cartCopy.splice(itemNumber, 1);
-            update(cartCopy)
+            const cartCopy = { ...prev };
+            if (cartCopy.products && cartCopy.products[itemNumber]) {
+                cartCopy.total -= quantity;
+                delete cartCopy.products[itemNumber]
+                //update(cartCopy)
+            }
             return cartCopy;
         })
-
     }
 
     const updateSubtotal = (amount: number) => {
-        setTotal(prev => prev + amount)
+        console.log('STATE ', cartState)
+        console.log('CONTEXT ', cart)
+        setTotalPrice(prev => prev + amount)
+    }
+
+    const updateCart = (subtotal: number, quantity?: number) => {
+        console.log('UPDATE CART ', quantity)
+        if (quantity) {
+            setCartState(prev => {
+                prev.total += quantity;
+                //update(prev);
+                return prev;
+            })
+        }
+        setTotalPrice(prev => prev + subtotal)
     }
 
     useEffect(() => {
-       //update(cartState)
+        setCartState(cart)
+        let accTotal = 0;
+        for (const productID in cart.products) {
+            const productQuantity = cart.products[productID];
+            const comicBookPrice = comicBooks[productID].price;
+            accTotal = accTotal + productQuantity * comicBookPrice;
+        }
+        setTotalPrice(accTotal);
+    }, [])
+
+    useEffect(() => {
+        update(cartState);
     }, [cartState])
 
 
     useEffect(() => {
-        console.log(cart)
-        setCartState(cart)
-        cart.forEach(item => {
-            setTotal(prev => prev + (item.quantity * item.price))
-        })
-    }, [cart])
+        const holder: React.ReactNode[] = [];
+        if (cartState.products) {
+            for (const id in cartState.products) {
+                const comicBookData: IComicBook = comicBooks[id];
+                const quantity = cartState.products[id];
+
+                holder.push(
+                    <CartItem
+                        key={`${id}-${comicBookData.title}`}
+                        img={comicBookData.imgSrc}
+                        title={comicBookData.title}
+                        price={comicBookData.price}
+                        quantity={quantity}
+                        index={Number(id)}
+                        updateQuantity={updateQuantity}
+                        remove={removeItem}
+                        updateCart={updateCart} />)
+            }
+        }
+
+        setProductList(holder)
+
+    }, [cartState])
+
+    /*
+        useEffect(() => {
+            console.log(cart)
+            setCartState(prev => {
+                prev.total = totalQuantity;
+                return prev;
+            })
+        }, [totalQuantity])
+        */
 
     return (
         <>
@@ -56,12 +112,10 @@ const CartComponent = () => {
                     <h5 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
                         Cart
                     </h5>
-                    {cartState.length > 0 ?
+                    {cartState.total && cartState.total > 0 ?
                         <div className="flow-root">
                             <ul className="divide-y divide-gray-200 dark:divide-gray-700">
-                                {cartState.map(({ title, imgSrc, price, quantity }, index) => (
-                                    <CartItem key={`${index}-${title}`} img={imgSrc} title={title} price={price} quantity={quantity} index={index} updateQuantity={updateQuantity} remove={removeItem} updateTotal={updateSubtotal} />
-                                ))}
+                                {productList}
                                 <li className="py-3 sm:py-4">
                                     <div className="flex justify-end">
                                         <Card className="text-center w-1/3">
@@ -69,7 +123,7 @@ const CartComponent = () => {
                                                 Subtotal
                                             </h5>
                                             <hr />
-                                            <p className="font-semibold text-gray-900 dark:text-white"> ${total.toFixed(2)}</p>
+                                            <p className="font-semibold text-gray-900 dark:text-white"> ${totalPrice.toFixed(2)}</p>
                                             <Button>
                                                 <p> Proceed to Checkout</p>
                                             </Button>
@@ -92,21 +146,24 @@ const CartComponent = () => {
 export default CartComponent;
 
 
-const CartItem = ({ img, title, quantity, price, index, updateQuantity, remove, updateTotal }:
-    { img: string, title: string, quantity: number, price: number, index: number, updateQuantity: (itemNumber: number, newQuantity: number) => void, remove: (itemNumber: number) => void, updateTotal: (param: number) => void }) => {
+const CartItem = ({ img, title, quantity, price, index, updateQuantity, remove, updateCart }:
+    { img: string, title: string, quantity: number, price: number, index: number, updateQuantity: (itemNumber: number, newQuantity: number) => void, remove: (itemNumber: number, quantity: number) => void, updateCart: (subtotal: number, quantity?: number) => void }) => {
     const [quantityState, setQuantityState] = useState(quantity);
     const imgSrc = useImage(img)
 
     const handleChange: React.ChangeEventHandler<HTMLInputElement> = (ev) => {
         const newQuantity = Number(ev.target.value);
+        const dQuantity = newQuantity - quantity
+        if (newQuantity === 0) remove(index, quantity);
+        else updateQuantity(index, newQuantity);
+        updateCart(dQuantity * price, dQuantity);
         setQuantityState(newQuantity)
-        updateQuantity(index, newQuantity);
-        updateTotal(newQuantity * price);
+
     }
 
     const handleClick: React.MouseEventHandler<HTMLButtonElement> = (ev) => {
-        remove(index);
-        updateTotal((quantity * price * -1))
+        remove(index, quantity);
+        updateCart((quantity * price * -1))
     }
 
     return (

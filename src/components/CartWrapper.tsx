@@ -1,34 +1,54 @@
 import React, { useEffect, useState } from "react";
 import { CartContext } from "../context/CartContext";
-import { ICartItem } from "../interfaces/interfaces";
+import { IItem, ICart, Add, Remove, Update } from "../interfaces/interfaces";
 
 
 const CartWrapper = ({ children }) => {
-    const [cart, setCart] = useState<ICartItem[]>([]);
+    const storedCart = localStorage.getItem('cart');
+    let storedCartData = {
+        products: {},
+        total: 0,
+    }
+    if (storedCart) {
+        storedCartData = JSON.parse(storedCart);
+    }
+    const [cart, setCart] = useState<ICart>(storedCartData);
     const [isUpdated, setIsUpdated] = useState(false);
 
-    const add = (newItem: ICartItem) => {
-        setCart(prev => [...prev, newItem])
-    }
-
-    const remove = () => {
+    const add: Add = (newItem: IItem) => {
+        const id = Object.keys(newItem)[0];
         setCart(prev => {
-            const cartCopy = [...prev];
-            cartCopy.pop()
-            return cartCopy;
+            if (prev) {
+                if (prev.products[id]) prev.products[id] += newItem[id]
+                else prev.products = { ...prev.products, ...newItem };
+                prev.total += newItem[id];
+            }
+            console.log(prev)
+            return prev;
         })
     }
 
-    const update = (updatedCart: ICartItem[]) => {
+    const remove: Remove = (newItem: IItem) => {
+        const id = Object.keys(newItem)[0];
+        setCart(prev => {
+            if (prev) {
+                prev.total -= newItem[id];
+                prev.products[id] -= newItem[id];
+                if (prev.products[id] === 0) delete prev.products[id];
+            }
+            return prev;
+        })
+    }
+
+    const update: Update = (updatedCart: ICart) => {
         setCart(updatedCart);
         setIsUpdated(true);
     }
 
     useEffect(() => {
-        if (cart.length > 0) {
-            localStorage.removeItem('cart')
-            localStorage.setItem('cart', JSON.stringify(cart))
-        }
+        localStorage.removeItem('cart')
+        localStorage.setItem('cart', JSON.stringify(cart))
+
     }, [cart])
 
     useEffect(() => {
