@@ -2,15 +2,10 @@ import React, { useEffect, useState } from "react";
 import { CartContext } from "../context/CartContext";
 import { IItem, ICart, Add, Remove, Update } from "../interfaces/interfaces";
 
-
 const CartWrapper = ({ children }) => {
-    const storedCart = localStorage.getItem('cart');
     let storedCartData = {
         products: {},
         total: 0,
-    }
-    if (storedCart) {
-        storedCartData = JSON.parse(storedCart);
     }
     const [cart, setCart] = useState<ICart>(storedCartData);
     const [isUpdated, setIsUpdated] = useState(false);
@@ -23,7 +18,6 @@ const CartWrapper = ({ children }) => {
                 else prev.products = { ...prev.products, ...newItem };
                 prev.total += newItem[id];
             }
-            console.log(prev)
             return prev;
         })
     }

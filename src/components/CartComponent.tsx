@@ -18,7 +18,6 @@ const CartComponent = () => {
             const cartCopy = { ...prev };
             if (cartCopy.products && cartCopy.products[itemNumber]) {
                 cartCopy.products[itemNumber] = newQuantity;
-                //update(cartCopy)
             }
             return cartCopy;
         })
@@ -30,7 +29,6 @@ const CartComponent = () => {
             if (cartCopy.products && cartCopy.products[itemNumber]) {
                 cartCopy.total -= quantity;
                 delete cartCopy.products[itemNumber]
-                //update(cartCopy)
             }
             return cartCopy;
         })
@@ -47,7 +45,6 @@ const CartComponent = () => {
         if (quantity) {
             setCartState(prev => {
                 prev.total += quantity;
-                //update(prev);
                 return prev;
             })
         }
@@ -94,16 +91,6 @@ const CartComponent = () => {
         setProductList(holder)
 
     }, [cartState])
-
-    /*
-        useEffect(() => {
-            console.log(cart)
-            setCartState(prev => {
-                prev.total = totalQuantity;
-                return prev;
-            })
-        }, [totalQuantity])
-        */
 
     return (
         <>
